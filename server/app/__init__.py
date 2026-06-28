@@ -47,6 +47,9 @@ def create_app(config_name: str = "development") -> Flask:
             "message": "Cakes & Crunches Backend API is running successfully."
         }), 200
 
+    with app.app_context():
+        db.create_all()
+
     return app
 
 
