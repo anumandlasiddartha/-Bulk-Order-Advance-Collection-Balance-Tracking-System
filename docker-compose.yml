@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # Python Flask Backend
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - backend_data:/app/instance
+    environment:
+      - SECRET_KEY=production-secret-key-cakes-crunches-2026
+      - DATABASE_URL=sqlite:////app/instance/cakes_and_crunches.db
+      - FLASK_ENV=production
+    restart: always
+
+  # React Frontend served via Nginx
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always
+
+volumes:
+  backend_data:
